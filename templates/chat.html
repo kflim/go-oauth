@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatroom</title>
+  </head>
+  <body>
+    <h1>Chatroom</h1>
+    <div
+      id="chatbox"
+      style="
+        height: 300px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 10px;
+      "
+    ></div>
+    <input type="text" id="message" placeholder="Type a message..." />
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+      let ws = new WebSocket("ws://localhost:5000/ws");
+
+      ws.onmessage = function (event) {
+        let chatbox = document.getElementById("chatbox");
+        chatbox.innerHTML += event.data + "<br/>";
+        chatbox.scrollTop = chatbox.scrollHeight;
+      };
+
+      function sendMessage() {
+        let messageInput = document.getElementById("message");
+        ws.send(messageInput.value);
+        messageInput.value = "";
+      }
+    </script>
+  </body>
+</html>

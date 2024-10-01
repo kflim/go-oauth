@@ -1,0 +1,22 @@
+# Build artifacts
+/bin/
+/obj/
+
+# Dependency directories
+/vendor/
+
+# Go modules cache
+~/.cache/go-build
+
+# Environment files
+.env
+
+# Editor-specific files
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
