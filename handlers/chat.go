@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"github.com/markbates/goth/gothic"
+	"github.com/kflim/go-oauth/service"
 )
 
 type Client struct {
@@ -59,7 +59,7 @@ func ChatRoom(c *gin.Context, hub *ChatHub) {
 		return
 	}
 
-	// Retrieve the session to get the user's name
+	/* // Retrieve the session to get the user's name
 	userID, err := gothic.GetFromSession("userID", c.Request)
 	if userID == "" {
 		// If user is not authenticated, close the connection
@@ -72,7 +72,15 @@ func ChatRoom(c *gin.Context, hub *ChatHub) {
 		conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseInternalServerErr, "Internal Server Error"))
 		conn.Close()
 		return
+	} */
+
+	// Likely to have valid claims using middleware
+	userClaims := service.ParseAccessToken(c.Request.CookiesNamed("accessToken")[0].Value)
+	if userClaims.StandardClaims.Valid() != nil {
+		c.Redirect(http.StatusTemporaryRedirect, "/retry-login")
 	}
+
+	userID := userClaims.Email
 
 	client := &Client{Conn: conn, Send: make(chan []byte, 256), UserID: userID}
 	hub.ClientRegister <- client

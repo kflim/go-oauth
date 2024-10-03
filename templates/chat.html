@@ -29,6 +29,8 @@
       };
 
       function sendMessage() {
+        let chatbox = document.getElementById("chatbox");
+        chatbox.scrollTop = chatbox.scrollHeight;
         let messageInput = document.getElementById("message");
         ws.send(messageInput.value);
         messageInput.value = "";

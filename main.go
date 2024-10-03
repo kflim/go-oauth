@@ -56,12 +56,14 @@ func main() {
 	r.GET("/", handlers.Home)
 	r.GET("/auth/:provider", handlers.SignInWithProvider)
 	r.GET("/auth/:provider/callback", handlers.CallbackHandler)
-	r.GET("/success", handlers.Success)
 
 	r.GET("/ws", func(c *gin.Context) {
     // Assuming you have a global or accessible hub instance
     handlers.ChatRoom(c, &hub)
-})
+	})
+
+	r.GET("/success", handlers.Success)
+	r.GET("/retry-login", handlers.RetryLogin)
 
 	r.Run(":5000")
 }
